@@ -13,7 +13,7 @@
          additional functionality it is fine to subclass or reimplement
          FlutterApplication and put your custom class here. -->
     <application
-        android:label="amap_location_flutter_plugin_example"
+        android:label="千寻"
         android:icon="@mipmap/ic_launcher">
         <meta-data android:name="flutterEmbedding" android:value="2"/>
         <activity
@@ -32,5 +32,13 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <service
+            android:enabled="true"
+            android:exported="true"
+            android:name="id.flutter.flutter_background_service.BackgroundService"
+            android:stopWithTask="false"
+            android:foregroundServiceType = "location"
+            />
     </application>
 </manifest>

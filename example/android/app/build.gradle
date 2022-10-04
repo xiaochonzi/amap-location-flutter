@@ -25,7 +25,7 @@ apply plugin: 'com.android.application'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 33
 
     lintOptions {
         disable 'InvalidPackage'
@@ -33,25 +33,25 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.amap.location.amaplocationflutterpluginexample"
-        minSdkVersion 17
-        targetSdkVersion 28
+        applicationId "com.zhiyun.qianxun"
+        minSdkVersion 19
+        targetSdkVersion 29
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
     signingConfigs {
-        debug {
-            //keystore中key的别名
-            keyAlias 'androiddebugkey'
-            //keystore中key的密码
-            keyPassword 'android'
-            //keystore的文件路径，可以是绝对路径也可以是相对路径
-            storeFile file('../../debug.keystore')
-            //keystore的密码
-            storePassword 'android'
-        }
+//        debug {
+//            //keystore中key的别名
+//            keyAlias 'androiddebugkey'
+//            //keystore中key的密码
+//            keyPassword 'android'
+//            //keystore的文件路径，可以是绝对路径也可以是相对路径
+//            storeFile file('../../debug.keystore')
+//            //keystore的密码
+//            storePassword 'android'
+//        }
     }
 
     buildTypes {
