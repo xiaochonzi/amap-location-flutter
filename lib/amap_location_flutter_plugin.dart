@@ -43,6 +43,15 @@ class AmapLocationFlutterPlugin {
     _pluginKey = DateTime.now().millisecondsSinceEpoch.toString();
   }
 
+  static void updatePrivacyShow(bool isContains, bool isShow){
+    _methodChannel.invokeMethod("updatePrivacyShow", {"isContains": isContains, "isShow":isShow});
+  }
+
+  static void updatePrivacyAgree(bool isAgree){
+    _methodChannel.invokeMethod("updatePrivacyAgree", {"isAgree": isAgree});
+
+  }
+
   ///开始定位
   void startLocation() {
     _methodChannel.invokeMethod('startLocation', {'pluginKey': _pluginKey});

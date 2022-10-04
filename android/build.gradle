@@ -33,7 +33,13 @@ android {
     }
 
     dependencies {
-        implementation fileTree(dir: 'libs', include: ['*.jar'])
-//        compile 'com.amap.api:location:4.9.0'
+     //   implementation fileTree(dir: 'libs', include: ['*.jar'])
+      //compile 'com.amap.api:location:4.9.0'
     }
+}
+
+dependencies {
+    implementation 'com.amap.api:location:6.1.0'
+    // implementation fileTree(includes: ['*.jar'], dir: 'libs')
+    // implementation rootProject.findProject(":flutter_bmfbase")
 }

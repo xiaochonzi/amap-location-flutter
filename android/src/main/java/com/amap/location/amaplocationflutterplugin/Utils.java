@@ -17,7 +17,6 @@ import java.util.Map;
  */
 public class Utils {
 
-
     public static Map<String, Object> buildLocationResultMap(AMapLocation location) {
         Map<String, Object> result = new LinkedHashMap<String, Object>();
         result.put("callbackTime", formatUTC(System.currentTimeMillis(), null));

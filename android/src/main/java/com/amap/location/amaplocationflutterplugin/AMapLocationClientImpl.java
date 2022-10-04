@@ -19,6 +19,7 @@ import io.flutter.plugin.common.EventChannel;
  */
 public class AMapLocationClientImpl implements AMapLocationListener {
 
+    private static final String TAG = AMapLocationClientImpl.class.getName();
     private Context mContext;
     private AMapLocationClientOption locationOption = new AMapLocationClientOption();
     private AMapLocationClient locationClient = null;
@@ -30,8 +31,12 @@ public class AMapLocationClientImpl implements AMapLocationListener {
         mContext = context;
         mPluginKey = pluginKey;
         mEventSink = eventSink;
-        if(null == locationClient) {
-            locationClient = new AMapLocationClient(context);
+        if (null == locationClient) {
+            try {
+                locationClient = new AMapLocationClient(context);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -39,8 +44,13 @@ public class AMapLocationClientImpl implements AMapLocationListener {
      * 开始定位
      */
     public void startLocation() {
+        Log.d(TAG, "startLocation");
         if (null == locationClient) {
-            locationClient = new AMapLocationClient(mContext);
+            try {
+                locationClient = new AMapLocationClient(mContext);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         if (null != locationOption) {
             locationClient.setLocationOption(locationOption);
@@ -54,6 +64,7 @@ public class AMapLocationClientImpl implements AMapLocationListener {
      * 停止定位
      */
     public void stopLocation() {
+        Log.d(TAG, "stopLocation");
         if (null != locationClient) {
             locationClient.stopLocation();
             locationClient.onDestroy();
@@ -62,11 +73,13 @@ public class AMapLocationClientImpl implements AMapLocationListener {
     }
 
     public void destroy() {
-        if(null != locationClient) {
+        Log.d(TAG, "destroy");
+        if (null != locationClient) {
             locationClient.onDestroy();
             locationClient = null;
         }
     }
+
     /**
      * 定位回调
      *
@@ -89,33 +102,28 @@ public class AMapLocationClientImpl implements AMapLocationListener {
      * @param optionMap
      */
     public void setLocationOption(Map optionMap) {
+        Log.d(TAG, "setLocationOption");
         if (null == locationOption) {
             locationOption = new AMapLocationClientOption();
         }
-
         if (optionMap.containsKey("locationInterval")) {
             locationOption.setInterval(((Integer) optionMap.get("locationInterval")).longValue());
         }
-
         if (optionMap.containsKey("needAddress")) {
             locationOption.setNeedAddress((boolean) optionMap.get("needAddress"));
         }
-
         if (optionMap.containsKey("locationMode")) {
             try {
                 locationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.values()[(int) optionMap.get("locationMode")]);
             } catch (Throwable e) {
             }
         }
-
         if (optionMap.containsKey("geoLanguage")) {
             locationOption.setGeoLanguage(AMapLocationClientOption.GeoLanguage.values()[(int) optionMap.get("geoLanguage")]);
         }
-
         if (optionMap.containsKey("onceLocation")) {
             locationOption.setOnceLocation((boolean) optionMap.get("onceLocation"));
         }
-
         if (null != locationClient) {
             locationClient.setLocationOption(locationOption);
         }

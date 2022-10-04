@@ -2,6 +2,7 @@ package com.amap.location.amaplocationflutterplugin;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.amap.api.location.AMapLocationClient;
 
@@ -24,6 +25,7 @@ public class AmapLocationFlutterPlugin implements MethodCallHandler,
 
     private static final String CHANNEL_METHOD_LOCATION = "amap_location_flutter_plugin";
     private static final String CHANNEL_STREAM_LOCATION = "amap_location_flutter_plugin_stream";
+    private static final String TAG = AmapLocationFlutterPlugin.class.getName();
 
     private Context mContext = null;
 
@@ -35,9 +37,15 @@ public class AmapLocationFlutterPlugin implements MethodCallHandler,
     @Override
     public void onMethodCall(MethodCall call, Result result) {
         String callMethod = call.method;
-        switch (call.method) {
+        switch (callMethod) {
             case "setApiKey":
                 setApiKey((Map) call.arguments);
+                break;
+            case "updatePrivacyShow":
+                updatePrivacyShow((Map) call.arguments);
+                break;
+            case "updatePrivacyAgree":
+                updatePrivacyAgree((Map) call.arguments);
                 break;
             case "setLocationOption":
                 setLocationOption((Map) call.arguments);
@@ -56,6 +64,17 @@ public class AmapLocationFlutterPlugin implements MethodCallHandler,
                 break;
 
         }
+    }
+
+    private void updatePrivacyAgree(Map arguments) {
+        Boolean isAgree = (Boolean) arguments.get("isAgree");
+        AMapLocationClient.updatePrivacyAgree(mContext, isAgree);
+    }
+
+    private void updatePrivacyShow(Map arguments) {
+        Boolean isContains = (Boolean) arguments.get("isContains");
+        Boolean isShow = (Boolean) arguments.get("isShow");
+        AMapLocationClient.updatePrivacyShow(mContext, isContains, isShow);
     }
 
     @Override
@@ -131,25 +150,21 @@ public class AmapLocationFlutterPlugin implements MethodCallHandler,
         }
     }
 
-
     @Override
     public void onAttachedToEngine(FlutterPluginBinding binding) {
         if (null == mContext) {
             mContext = binding.getApplicationContext();
-
             /**
              * 方法调用通道
              */
             final MethodChannel channel = new MethodChannel(binding.getBinaryMessenger(), CHANNEL_METHOD_LOCATION);
             channel.setMethodCallHandler(this);
-
             /**
              * 回调监听通道
              */
             final EventChannel eventChannel = new EventChannel(binding.getBinaryMessenger(), CHANNEL_STREAM_LOCATION);
             eventChannel.setStreamHandler(this);
         }
-
     }
 
     @Override
@@ -163,12 +178,11 @@ public class AmapLocationFlutterPlugin implements MethodCallHandler,
         if (null == locationClientMap) {
             locationClientMap = new ConcurrentHashMap<String, AMapLocationClientImpl>(8);
         }
-
         String pluginKey = getPluginKeyFromArgs(argsMap);
+        Log.d(TAG, "getLocationClientImp: " + pluginKey);
         if (TextUtils.isEmpty(pluginKey)) {
             return null;
         }
-
         if (!locationClientMap.containsKey(pluginKey)) {
             AMapLocationClientImpl locationClientImp = new AMapLocationClientImpl(mContext, pluginKey, mEventSink);
             locationClientMap.put(pluginKey, locationClientImp);
